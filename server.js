@@ -4,7 +4,8 @@ const passportSetup = require('./config/passport-setup');
 const cookieSession = require('cookie-session');
 const passport = require('passport');
 const keys = require('./config/env_config'); 
-const testAPI = require('./db/business'); 
+const apiRoutes = require('./routes/api-routes');
+const authRoutes = require('./routes/auth-routes'); 
 
 //node server port 
 const PORT = process.env.PORT || 3000;  
@@ -28,15 +29,18 @@ app.use(passport.session());
 //use development files 
 app.use(express.static('development'))
 
-const authRoutes = require('./routes/auth-routes'); 
-app.use('/auth', authRoutes)
+//auth routes
+app.use('/auth', authRoutes); 
+
+//api routes
+app.use('/api', apiRoutes); 
 
 //displays dummy html for development only
 app.get('/', (req, res) => {
     res.send(express.static('/index.html'))
 }); 
 
-
+//making app listen on Port
 app.listen(PORT, (err) => {
     if (err) throw err; 
     console.log(`app listening on port ${PORT}`); 

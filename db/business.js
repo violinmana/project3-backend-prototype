@@ -5,7 +5,6 @@ const __ = require('lodash');
 const NodeGeocoder = require('node-geocoder');
 const options = {
   provider: 'google',
- 
   // Optional depending on the providers
   httpAdapter: 'https', // Default
   apiKey: 'AIzaSyCClN1022_IiEU-pj6XSuSYddtQl7vEpOA', // for Mapquest, OpenCage, Google Premier
@@ -21,26 +20,27 @@ const Business = {
         res.send(allBusinesses); 
     }, 
     //gets all businesses in city with promotions
-    getAllInCity: (cb) => {
+    getAllInCity: (city, cb) => {
+        //knex join on promotion where city = the city 
         knex('business').innerJoin('promotion', 'business.id', 'promotion.business_id')
-            .where('city', req.city)
+            .where('city', city)
             .then(result => {
+                //map through result to make object for markers 
                 let businesses = result.map(item => {
                     return {
-                        name: item.name, 
+                        name: item.business_name, 
                         address: `${item.address1} ${item.city} ${item.state}, ${item.zip}`, 
                         latitude: item.latitude, 
                         longitude: item.longitude,
-                        promotion: `${item.name}, ${item.description}, ${item.qtypeople}`
+                        promotion: `${item.promotion_name}, ${item.description}, ${item.qtypeople}`
                     }
                 })
-                console.log(businesses)
-                cb.send(businesses)
+                console.log(businesses); 
+                cb.send(businesses); 
             })
             .catch(err => console.log(err)); 
     }, 
-    addBusiness: (obj) => {
-
+    addBusiness: (obj, cb) => {
         knex('business')
             .insert({
                 name: name, 
@@ -51,8 +51,11 @@ const Business = {
                 latitude: latitude, 
                 longitude: longitude,
                 abclicense: abc, 
-
             })
+            .then((result) => {
+                cb.send(result); 
+            })
+            .catch(err => console.log(err)); 
     }
          
 }; 

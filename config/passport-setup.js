@@ -2,26 +2,27 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20');
 const knex = require('../db/knex/knex');
-const __ = require('lodash')
+const __ = require('lodash'); 
 require('dotenv').config();
 const keys = require('./env_config'); 
 
 //passport serialize user function
 passport.serializeUser((user, done) => {
     console.log('serialize user: ' + user.id);
-    done(null, user.id)
+    done(null, user.id); 
 });
 
 //passport deserialize user function 
 passport.deserializeUser((id, done) => {
-    knex('businessusers').where('id', id)
+    knex('businessusers')
+        .where('id', id)
         .select()
         .then((resp) => {
             console.log('deserialize:' + JSON.stringify(resp))
-            done(null, resp)
+            done(null, resp); 
         })
+        .catch(err => console.log(err)); 
 });
-
 
 passport.use(
     new GoogleStrategy({
@@ -32,9 +33,8 @@ passport.use(
         clientSecret: keys.clientSecret
     }, (accessToken, refreshToken, profile, done) => {
         //strategy callback 
-        console.log(profile)
         //lodash to pick data we need from profile object 
-        let data = __.pick(profile, 'displayName', 'id', 'name', 'email')
+        let data = __.pick(profile, 'displayName', 'id', 'name', 'email'); 
         //returning a promise 
         return new Promise((resolve, reject) => {
             //select where id = id to verify this is a new user before creating a new user in the db
@@ -50,21 +50,21 @@ passport.use(
                                 }) 
                                 .then((resp) => {
                                     //then resolve promise 
-                                    resolve(resp)
+                                    resolve(resp); 
                                 })
                         } else {
                             //if it does exist send to be serialized \
-                            done(null, rows[0])
+                            done(null, rows[0]); 
                         }
                     })
             }).then(() => {
                 //return the user signing in and send it to the serialize function to make them a cookie and show that they are signed in 
-                return knex('businessusers').where('google_id', data.id).select()
+                return knex('businessusers').where('google_id', data.id).select(); 
             }).then((user_id) => {
-                done(null, user_id[0])
+                done(null, user_id[0]); 
             })
             .catch(err => {
-                throw err
-            })
+                throw err; 
+            }); 
     })
-)
+); 

@@ -23,7 +23,7 @@ router.get('/google', passport.authenticate('google', {
 
 //route to get second auth redirect and take to profile page
 router.get('/profile', (req, res) => {
-    res.send(express.static('/development/profile.html'))
+    res.send(express.static('/development/profile.html')); 
 });  
 
 //google auth redirect 
