@@ -36,7 +36,7 @@ const Business = {
                     }
                 })
                 console.log(businesses); 
-                cb.send(businesses); 
+                cb.json(businesses); 
             })
             .catch(err => console.log(err)); 
     }, 
