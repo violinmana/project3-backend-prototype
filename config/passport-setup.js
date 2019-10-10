@@ -34,7 +34,7 @@ passport.use(
         //strategy callback 
         console.log(profile)
         //lodash to pick data we need from profile object 
-        let data = __.pick(profile, 'displayName', 'id', 'name')
+        let data = __.pick(profile, 'displayName', 'id', 'name', 'email')
         //returning a promise 
         return new Promise((resolve, reject) => {
             //select where id = id to verify this is a new user before creating a new user in the db
@@ -46,14 +46,14 @@ passport.use(
                             knex('businessusers').insert({
                                     name: data.displayName,
                                     google_id: data.id,
-                                    email: 'temp@temp.com'
-                                })
+                                    email: data.email
+                                }) 
                                 .then((resp) => {
                                     //then resolve promise 
                                     resolve(resp)
                                 })
                         } else {
-                            //if it does exist send to be serialized 
+                            //if it does exist send to be serialized \
                             done(null, rows[0])
                         }
                     })
