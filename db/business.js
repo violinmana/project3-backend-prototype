@@ -40,24 +40,24 @@ const Business = {
             })
             .catch(err => console.log(err)); 
     }, 
-    addBusiness: (obj, cb) => {
+    addBusiness: (obj, req, cb) => {
         knex('business')
             .insert({
-                name: name, 
-                address1: address1, 
-                city: city, 
-                state: state, 
-                zip: zip, 
-                latitude: latitude, 
-                longitude: longitude,
-                abclicense: abc, 
+                name: obj.name, 
+                address1: obj.address1, 
+                city: obj.city, 
+                state: obj.state, 
+                zip: obj.zip, 
+                latitude: obj.latitude, 
+                longitude: obj.longitude,
+                abclicense: obj.abc, 
+                user_id: req.user.id
             })
             .then((result) => {
                 cb.send(result); 
             })
             .catch(err => console.log(err)); 
     }
-         
 }; 
 
 module.exports = Business; 
