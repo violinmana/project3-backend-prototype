@@ -19,9 +19,9 @@ module.exports = {
   staging: {
     client: 'pg',
     connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
+      database: 'beer',
+      user:     'bd2e8d2755e5d8',
+      password: '30c8b054'
     },
     pool: {
       min: 2,
@@ -35,9 +35,9 @@ module.exports = {
   production: {
     client: 'pg',
     connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
+      database: 'beer',
+      user:     'bd2e8d2755e5d8',
+      password: '30c8b054'
     },
     pool: {
       min: 2,
@@ -47,5 +47,4 @@ module.exports = {
       tableName: 'knex_migrations'
     }
   }
-
 };
