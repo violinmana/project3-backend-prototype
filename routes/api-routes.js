@@ -7,7 +7,8 @@ router.get('/:city', (req, res) => {
     Business.getAllInCity(req.params.city, res)
 }); 
 
-router.get('/', (req, res) => {
+//route to get list of businesses
+router.get('/business/list', (req, res) => {
     Business.getAll(res); 
 }); 
 
