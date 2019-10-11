@@ -15,9 +15,11 @@ const geocoder = NodeGeocoder(options);
 //business model 
 const Business = {
     //gets all businesses
-    getAll: (req, res) => {
-        let allBusinesses = knex('business').select('*'); 
-        res.send(allBusinesses); 
+    getAll: (cb) => {
+        knex('business').select('*') 
+        .then((result) => {
+            cb.json(result); 
+        })
     }, 
     //gets all businesses in city with promotions
     getAllInCity: (city, cb) => {
