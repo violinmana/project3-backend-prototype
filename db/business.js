@@ -17,11 +17,8 @@ const geocoder = NodeGeocoder(options);
 //business model 
 const Business = {
     //gets all businesses
-    getAll: (cb) => {
-        knex('business').select('*') 
-        .then((result) => {
-            cb.json(result); 
-        })
+    getAll: () => {
+        return knex('business').select()
     }, 
     //gets all businesses in city with promotions
     getAllInCity: (city, cb) => {
@@ -33,7 +30,7 @@ const Business = {
                 //map through result to make array of objects for markers 
                 let promotions = result.map(item => {
                     return {
-                        promotion: `[${item.promotion_name}, ${item.qtypeople}, ${item.description}]`,
+                        promotion: [`${item.promotion_name}`, `${item.qtypeople}`, `${item.description}`],
                         name: item.business_name,
                         address: `${item.address1} ${item.address2} ${item.city} ${item.state}, ${item.zip}`,
                         latitude: item.latitude,
