@@ -7,41 +7,20 @@ dotenv.config();
 const NodeGeocoder = require('node-geocoder');
 const options = {
   provider: 'google',
-  // Optional depending on the providers
-  httpAdapter: 'https', // Default
-  apiKey: process.env.GOOGLE_API_KEY, // for Mapquest, OpenCage, Google Premier
-  formatter: null // 'gpx', 'string', ...
+  httpAdapter: 'https',
+  apiKey: process.env.GOOGLE_API_KEY,
+  formatter: null
 };
 const geocoder = NodeGeocoder(options);
 
-//business model 
+// Business Model
 const Business = {
-    //gets all businesses
-    getAll: () => {
+    // Gets all Businesses
+    getAllBusiness: () => {
         return knex('business').select()
     }, 
-    //gets all businesses in city with promotions
-    getAllInCity: (city, cb) => {
-        //knex join on promotion where city = the city 
-        knex('promotion').leftJoin('business', 'promotion.business_id', 'business.id')
-            .where('city', city)
-            .then(result => {
-                console.log(result);
-                //map through result to make array of objects for markers 
-                let promotions = result.map(item => {
-                    return {
-                        promotion: [`${item.promotion_name}`, `${item.qtypeople}`, `${item.description}`],
-                        name: item.business_name,
-                        address: `${item.address1} ${item.address2} ${item.city} ${item.state}, ${item.zip}`,
-                        latitude: item.latitude,
-                        longitude: item.longitude
-                    }
-                })
-                console.log(promotions); 
-                cb.json(promotions); 
-            })
-            .catch(err => console.log(err)); 
-    }, 
+    
+    // Adds a Business
     addBusiness: (obj, req, cb) => {
         knex('business')
             .insert({
@@ -59,7 +38,13 @@ const Business = {
                 cb.send(result); 
             })
             .catch(err => console.log(err)); 
+    },
+
+    // Get List of All Cities
+    getDistinctCities: () => {
+        return knex('business').distinct('city')
     }
 }; 
+
 
 module.exports = Business; 
