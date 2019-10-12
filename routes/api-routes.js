@@ -17,6 +17,13 @@ router.get('/business', (req, res) => {
     });
 });
 
+// Get List of All Cities
+router.get('/cities', (req, res) => {
+    Business.getAllCities().then(resp => {
+        res.json(resp)
+    })
+})
+
 // Add Business
 
 router.post('/add', (req, res) => {

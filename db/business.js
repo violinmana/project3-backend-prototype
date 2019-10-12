@@ -38,7 +38,13 @@ const Business = {
                 cb.send(result); 
             })
             .catch(err => console.log(err)); 
+    },
+
+    // Get List of All Cities
+    getDistinctCities: () => {
+        return knex('business').distinct('city')
     }
 }; 
+
 
 module.exports = Business; 
